@@ -1,27 +1,38 @@
+const addButton = document.getElementById('addButton');
+const taskInput = document.getElementById('taskInput');
+const taskList = document.getElementById('taskList');
+const clearButton = document.getElementById('clearButton');
 
-document.addEventListener('DOMContentLoaded', () => {
-    const addButton = document.getElementById('addButton');
-    const taskInput = document.getElementById('taskInput');
-    const taskList = document.getElementById('taskList');
-
-    addButton.addEventListener('click', () => {
-        const taskText = taskInput.value.trim();
-        if (taskText !== '') {
-            const taskItem = document.createElement('li');
-            taskItem.innerHTML = `
-                ${taskText}
-                <button class="completeButton">Complete</button>
-            `;
-            taskList.appendChild(taskItem);
-            taskInput.value = '';
-            attachCompleteHandler(taskItem);
-        }
-    });
-
-    function attachCompleteHandler(taskItem) {
-        const completeButton = taskItem.querySelector('.completeButton');
-        completeButton.addEventListener('click', () => {
-            taskItem.classList.toggle('completed');
-        });
+addButton.addEventListener('click', () => {
+    const taskText = taskInput.value.trim();
+    if (taskText !== '') {
+        const taskItem = document.createElement('li');
+        const completeButton = document.createElement('button');
+        completeButton.className = 'completeButton';
+        completeButton.innerText = 'Complete';
+        taskItem.appendChild(document.createTextNode(taskText));
+        taskItem.appendChild(completeButton);
+        taskList.appendChild(taskItem);
+        taskInput.value = '';
     }
+});
+
+taskList.addEventListener('click', (event) => {
+    if (event.target.classList.contains('completeButton')) {
+        const completeButton = event.target;
+        const taskItem = completeButton.parentElement;
+        
+        taskItem.classList.toggle('completed');
+        if (taskItem.classList.contains('completed')) {
+            completeButton.style.backgroundColor = 'gray';
+            completeButton.innerText = 'Completed';
+        } else {
+            completeButton.style.backgroundColor = '#007bff';
+            completeButton.innerText = 'Complete';
+        }
+    }
+});
+
+clearButton.addEventListener('click', () => {
+    taskList.innerHTML = '';
 });
